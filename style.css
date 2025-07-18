@@ -232,3 +232,17 @@ body{
     cursor: pointer;
 }
 
+/* график */
+.chart-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 20px auto;
+    background: rgba(24, 24, 27, 0.8);
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #fff;
+}
+
+.place-container canvas {
+    max-height: 200px;
+}
