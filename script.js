@@ -86,6 +86,62 @@ searchBtn.addEventListener('click', () => {
         getWeatherDataCity(city);
     }
 });
+/* график */
+
+const ctx = document.getElementById('tempChart').getContext('2d');
+
+const tempChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+        datasets: [
+            {
+                label: 'Day Temperature (°C)',
+                data: [21, 22, 23, 24, 25, 26, 27],
+                backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                borderColor: 'rgba(255, 159, 64, 0.7',
+                pointBackgroundColor: '#fff'
+            },
+            {
+                label: 'Night Temperature (°C)',
+                data: [18, 19, 20, 17, 5, 3, 8],
+                backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                borderColor: 'rgba(54, 162, 235, 1',
+                pointBackgroundColor: '#000000'
+            }
+        ]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#fff',
+                    font: {
+                        size: 12
+                    }
+                }
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: '#fff'
+                }
+            },
+            y: {
+                ticks: {
+                    color: '#fff'
+                },
+                title: {
+                    display: true,
+                    text: 'Temperature (°C)',
+                    color: '#fff'
+                }
+            }
+        }
+    }
+});
 
 function showWeatherData (data){
     let {humidity, pressure, sunrise, sunset, wind_speed} = data.current;
@@ -144,6 +200,22 @@ function showWeatherData (data){
         }
     })
 
+    /* сбор данных для графика */
+
+    const labels = [];
+    const dayTemps = [];
+    const nightTemps = [];
+
+    data.daily.slice(0, 7).forEach(day => {
+        labels.push(window.moment(day.dt*1000).format('ddd'));
+        dayTemps.push(day.temp.day);
+        nightTemps.push(day.temp.night);
+    });
+
+    tempChart.labels = labels;
+    tempChart.data.datasets[0].data = dayTemps;
+    tempChart.data.datasets[1].data = nightTemps;
+    tempChart.update();
 
     weatherForecastEl.innerHTML = otherDayForcast;
 }
